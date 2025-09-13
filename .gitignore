@@ -1,0 +1,28 @@
+# Terraform
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
+
+# Go
+*.exe
+*.test
+*.out
+
+# Lambda packages
+*.zip
+
+# AWS CLI output
+output.json
+
+# Logs
+*.log
+
+# IDE files
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db

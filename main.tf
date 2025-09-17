@@ -50,6 +50,20 @@ resource "aws_bedrockagent_knowledge_base" "bedrock_knowledge_base" {
   }
 }
 
+# Bedrockナレッジベース用S3データソース
+resource "aws_bedrockagent_data_source" "s3_data_source" {
+  knowledge_base_id = aws_bedrockagent_knowledge_base.bedrock_knowledge_base.id
+  name              = "s3-data-source"
+  description       = "S3バケットからのデータソース"
+
+  data_source_configuration {
+    type = "S3"
+    s3_configuration {
+      bucket_arn = aws_s3_bucket.s3_bucket.arn
+    }
+  }
+}
+
 # 1. DynamoDB テーブル - InquiryTable
 resource "aws_dynamodb_table" "inquiry_table" {
   name         = var.dynamodb_table_name

@@ -46,6 +46,11 @@ output "bedrock_knowledge_base_id" {
   value       = var.bedrock_knowledge_base_id
 }
 
+output "bedrock_data_source_id" {
+  description = "BedrockデータソースID"
+  value       = aws_bedrockagent_data_source.s3_data_source.data_source_id
+}
+
 output "aws_region" {
   description = "AWSリージョン"
   value       = var.aws_region

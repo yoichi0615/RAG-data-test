@@ -1,0 +1,118 @@
+Diagram:
+  DefinitionFiles:
+    - Type: URL
+      Url: "https://raw.githubusercontent.com/awslabs/diagram-as-code/main/definitions/definition-for-aws-icons-light.yaml"
+
+  Resources:
+    Canvas:
+      Type: AWS::Diagram::Canvas
+      Direction: vertical
+      Children:
+        - User
+        - AWSCloud
+
+    User:
+      Type: AWS::Diagram::Resource
+      Preset: User
+
+    AWSCloud:
+      Type: AWS::Diagram::Cloud
+      Direction: vertical
+      Preset: AWSCloudNoLogo
+      Children:
+        - LambdaGroup
+        - DataGroup
+        - AIMLGroup
+
+    # Lambda Functions Group
+    LambdaGroup:
+      Type: AWS::Diagram::HorizontalStack
+      Children:
+        - JudgeCategory
+        - CreateAnswer
+
+    JudgeCategory:
+      Type: AWS::Lambda::Function
+      Title: "judge-category\n(カテゴリ判定)"
+
+    CreateAnswer:
+      Type: AWS::Lambda::Function
+      Title: "create-answer\n(回答生成)"
+
+    # Data Storage Group
+    DataGroup:
+      Type: AWS::Diagram::HorizontalStack
+      Children:
+        - DynamoDB
+        - S3Bucket
+
+    DynamoDB:
+      Type: AWS::DynamoDB::Table
+      Title: "InquiryTable"
+
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Title: "cloud-tech-bedrock-s3"
+
+    # AI/ML Services Group
+    AIMLGroup:
+      Type: AWS::Diagram::HorizontalStack
+      Children:
+        - BedrockModel
+        - BedrockKB
+
+    BedrockModel:
+      Type: AWS::Diagram::Resource
+      Preset: "Amazon Bedrock"
+      Title: "Claude 3 Haiku"
+
+    BedrockKB:
+      Type: AWS::Diagram::Resource
+      Preset: "Amazon Bedrock"
+      Title: "Knowledge Base\n(RAG検索)"
+
+  Links:
+    # ユーザーからの問い合わせ投稿
+    - Source: User
+      SourcePosition: N
+      Target: DynamoDB
+      TargetPosition: S
+      TargetArrowHead:
+        Type: Open
+
+    # カテゴリ判定フロー
+    - Source: DynamoDB
+      SourcePosition: N
+      Target: JudgeCategory
+      TargetPosition: S
+      TargetArrowHead:
+        Type: Open
+
+    - Source: JudgeCategory
+      SourcePosition: E
+      Target: BedrockModel
+      TargetPosition: W
+      TargetArrowHead:
+        Type: Open
+
+    # 回答生成フロー
+    - Source: DynamoDB
+      SourcePosition: N
+      Target: CreateAnswer
+      TargetPosition: S
+      TargetArrowHead:
+        Type: Open
+
+    - Source: CreateAnswer
+      SourcePosition: E
+      Target: BedrockKB
+      TargetPosition: W
+      TargetArrowHead:
+        Type: Open
+
+    - Source: BedrockKB
+      SourcePosition: N
+      Target: S3Bucket
+      TargetPosition: S
+      TargetArrowHead:
+        Type: Open

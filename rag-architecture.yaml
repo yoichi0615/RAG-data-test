@@ -33,11 +33,11 @@ Diagram:
 
     JudgeCategory:
       Type: AWS::Lambda::Function
-      Title: "judge-category\n(カテゴリ判定)"
+      Title: "Lambda\n(カテゴリ判定)"
 
     CreateAnswer:
       Type: AWS::Lambda::Function
-      Title: "create-answer\n(回答生成)"
+      Title: "Lambda\n(回答生成)"
 
     # Data Storage Group
     DataGroup:
@@ -48,11 +48,11 @@ Diagram:
 
     DynamoDB:
       Type: AWS::DynamoDB::Table
-      Title: "InquiryTable"
+      Title: "DynamoDB"
 
     S3Bucket:
       Type: AWS::S3::Bucket
-      Title: "cloud-tech-bedrock-s3"
+      Title: "bedrock-s3"
 
     # AI/ML Services Group
     AIMLGroup:
@@ -61,10 +61,10 @@ Diagram:
         - BedrockModel
         - BedrockKB
 
-    BedrockModel:
-      Type: AWS::Diagram::Resource
-      Preset: "Amazon Bedrock"
-      Title: "Claude 3 Haiku"
+    # BedrockModel:
+    #   Type: AWS::Diagram::Resource
+    #   Preset: "Amazon Bedrock"
+    #   Title: "Claude"
 
     BedrockKB:
       Type: AWS::Diagram::Resource
@@ -75,7 +75,6 @@ Diagram:
     # ユーザーからの問い合わせ投稿
     - Source: User
       SourcePosition: N
-      Target: DynamoDB
       TargetPosition: S
       TargetArrowHead:
         Type: Open
